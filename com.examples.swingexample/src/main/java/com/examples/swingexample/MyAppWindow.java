@@ -159,4 +159,10 @@ public class MyAppWindow extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 	}
+
+	public void showAllStudents(List<Student> asList) {
+		asList.stream()
+			.map(StudentViewModel::new)
+			.forEach(listModel::addElement);
+	}
 }
