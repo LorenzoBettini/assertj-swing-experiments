@@ -1,16 +1,17 @@
 package com.examples.swingexample;
 
 import java.awt.EventQueue;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
-import javax.swing.JFrame;
-import java.awt.GridLayout;
 import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import javax.swing.JTable;
 
 public class MyAppWindow extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -18,7 +19,7 @@ public class MyAppWindow extends JFrame {
 	private StudentRepository studentRepository;
 	private JTextField idTextField;
 	private JTextField nameTextField;
-	private JTable studentTable;
+	private JButton btnAdd;
 
 	/**
 	 * Launch the application.
@@ -60,8 +61,61 @@ public class MyAppWindow extends JFrame {
 	/**
 	 * Create the application.
 	 */
-	public MyAppWindow(StudentRepository studentRepository) {
-		this.studentRepository = studentRepository;
+	public MyAppWindow(StudentRepository repository) {
+		this.studentRepository = repository;
+		GridBagLayout gridBagLayout = new GridBagLayout();
+		gridBagLayout.columnWidths = new int[]{0, 0, 267, 0, 0};
+		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 0};
+		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 1.0, 1.0, 1.0};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		getContentPane().setLayout(gridBagLayout);
+		
+		JLabel lblId = new JLabel("id");
+		GridBagConstraints gbc_lblId = new GridBagConstraints();
+		gbc_lblId.insets = new Insets(0, 0, 5, 5);
+		gbc_lblId.anchor = GridBagConstraints.EAST;
+		gbc_lblId.gridx = 1;
+		gbc_lblId.gridy = 1;
+		getContentPane().add(lblId, gbc_lblId);
+		
+		idTextField = new JTextField();
+		GridBagConstraints gbc_textField = new GridBagConstraints();
+		gbc_textField.gridwidth = 3;
+		gbc_textField.insets = new Insets(0, 0, 5, 5);
+		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textField.gridx = 2;
+		gbc_textField.gridy = 1;
+		getContentPane().add(idTextField, gbc_textField);
+		idTextField.setColumns(10);
+		
+		JLabel lblName = new JLabel("name");
+		GridBagConstraints gbc_lblName = new GridBagConstraints();
+		gbc_lblName.insets = new Insets(0, 0, 5, 5);
+		gbc_lblName.gridx = 1;
+		gbc_lblName.gridy = 3;
+		getContentPane().add(lblName, gbc_lblName);
+		
+		nameTextField = new JTextField();
+		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
+		gbc_textField_1.gridwidth = 3;
+		gbc_textField_1.insets = new Insets(0, 0, 5, 5);
+		gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textField_1.gridx = 2;
+		gbc_textField_1.gridy = 3;
+		getContentPane().add(nameTextField, gbc_textField_1);
+		nameTextField.setColumns(10);
+		
+		btnAdd = new JButton("Add");
+		btnAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				studentRepository.save(new Student());
+			}
+		});
+		GridBagConstraints gbc_btnAdd = new GridBagConstraints();
+		gbc_btnAdd.insets = new Insets(0, 0, 0, 5);
+		gbc_btnAdd.gridx = 2;
+		gbc_btnAdd.gridy = 4;
+		getContentPane().add(btnAdd, gbc_btnAdd);
 		initialize();
 	}
 
@@ -72,32 +126,6 @@ public class MyAppWindow extends JFrame {
 		setTitle(getClass().getSimpleName());
 		setBounds(100, 100, 450, 300);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		getContentPane().setLayout(new GridLayout(4, 0, 0, 0));
-		
-		JButton btnClickMe = new JButton("Click me");
-		btnClickMe.setName("clickMe");
-		btnClickMe.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				studentRepository.save(new Student());
-			}
-		});
-		
-		JLabel lblId = new JLabel("id");
-		getContentPane().add(lblId);
-		
-		idTextField = new JTextField();
-		getContentPane().add(idTextField);
-		idTextField.setColumns(10);
-		
-		JLabel lblName = new JLabel("name");
-		getContentPane().add(lblName);
-		
-		nameTextField = new JTextField();
-		getContentPane().add(nameTextField);
-		nameTextField.setColumns(10);
-		getContentPane().add(btnClickMe);
-		
-		studentTable = new JTable();
-		getContentPane().add(studentTable);
+
 	}
 }

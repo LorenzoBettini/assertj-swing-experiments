@@ -9,6 +9,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import static org.assertj.swing.core.matcher.JButtonMatcher.*;
+
 import static org.mockito.Mockito.*;
 
 public class MyAppWindowTest {
@@ -33,7 +35,7 @@ public class MyAppWindowTest {
 
 	@Test
 	public void shouldCallStudentRepository() {
-		window.button("clickMe").click();
+		window.button(withText("Add")).click();
 		verify(studentRepository).save(new Student());
 	}
 }
