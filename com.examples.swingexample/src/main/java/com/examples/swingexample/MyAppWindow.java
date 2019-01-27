@@ -22,14 +22,11 @@ public class MyAppWindow extends JFrame {
 	private static final class StudentListCellRenderer extends JLabel implements ListCellRenderer<Student> {
 		private static final long serialVersionUID = 1L;
 
-		public StudentListCellRenderer() {
-			setOpaque(true);
-		}
 		@Override
 		public Component getListCellRendererComponent(JList<? extends Student> list, Student value, int index,
 				boolean isSelected, boolean cellHasFocus) {
 			setText(value.getId() + " - " + value.getName());
-			return null;
+			return this;
 		}
 	}
 
@@ -151,7 +148,7 @@ public class MyAppWindow extends JFrame {
 		gbc_scrollPane.gridy = 3;
 		getContentPane().add(scrollPane, gbc_scrollPane);
 		
-//		list.setCellRenderer(new StudentListCellRenderer());
+		list.setCellRenderer(new StudentListCellRenderer());
 		initialize();
 	}
 
