@@ -1,6 +1,5 @@
 package com.examples.swingexample;
 
-import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -13,20 +12,22 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.ListCellRenderer;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 
 public class MyAppWindow extends JFrame {
-	private static final class StudentListCellRenderer extends JLabel implements ListCellRenderer<Student> {
-		private static final long serialVersionUID = 1L;
+
+	private static final class StudentViewModel {
+		private Student student;
+
+		public StudentViewModel(Student student) {
+			this.student = student;
+		}
 
 		@Override
-		public Component getListCellRendererComponent(JList<? extends Student> list, Student value, int index,
-				boolean isSelected, boolean cellHasFocus) {
-			setText(value.getId() + " - " + value.getName());
-			return this;
+		public String toString() {
+			return student.getId() + " - " + student.getName();
 		}
 	}
 
@@ -36,12 +37,10 @@ public class MyAppWindow extends JFrame {
 	private JTextField idTextField;
 	private JTextField nameTextField;
 	private JButton btnAdd;
-	private JList<Student> list;
+	private JList<StudentViewModel> list;
 	private JScrollPane scrollPane;
 
-	private DefaultListModel<Student> listModel = new DefaultListModel<Student>() {{
-		addElement(new Student("99", "first"));
-	}};
+	private DefaultListModel<StudentViewModel> listModel = new DefaultListModel<>();
 
 	/**
 	 * Launch the application.
@@ -129,7 +128,7 @@ public class MyAppWindow extends JFrame {
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				studentRepository.save(new Student());
-				listModel.addElement(new Student("1", "test"));
+				listModel.addElement(new StudentViewModel(new Student("1", "test")));
 			}
 		});
 		GridBagConstraints gbc_btnAdd = new GridBagConstraints();
@@ -148,7 +147,6 @@ public class MyAppWindow extends JFrame {
 		gbc_scrollPane.gridy = 3;
 		getContentPane().add(scrollPane, gbc_scrollPane);
 		
-		list.setCellRenderer(new StudentListCellRenderer());
 		initialize();
 	}
 
