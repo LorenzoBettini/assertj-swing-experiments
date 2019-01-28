@@ -244,9 +244,19 @@ public class MyAppWindow extends JFrame {
 
 	public void studentRemoved(Student student) {
 		listModel.removeStudent(student);
+		resetErrorLabel();
 	}
 
 	public void studentAdded(Student student) {
 		listModel.addStudent(student);
+		resetErrorLabel();
+	}
+
+	private void resetErrorLabel() {
+		lblErrorMessage.setText(" ");
+	}
+
+	public void showError(String message, Student student) {
+		lblErrorMessage.setText(message + ": " + student);
 	}
 }

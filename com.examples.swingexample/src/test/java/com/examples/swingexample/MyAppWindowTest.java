@@ -1,13 +1,16 @@
 package com.examples.swingexample;
 
+import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.matcher.JButtonMatcher;
 import org.assertj.swing.core.matcher.JLabelMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JButtonFixture;
 import org.assertj.swing.fixture.JTextComponentFixture;
+import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -19,6 +22,7 @@ import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
 
+@RunWith(GUITestRunner.class)
 public class MyAppWindowTest extends AssertJSwingJUnitTestCase {
 
 	private FrameFixture window;
@@ -151,5 +155,44 @@ public class MyAppWindowTest extends AssertJSwingJUnitTestCase {
 		String[] listContents = window.list().contents();
 		assertThat(listContents)
 			.containsExactly("1 - test1");
+	}
+
+	@Test
+	public void testShowErrorShouldShowTheMessageInTheErrorLabel() {
+		GuiActionRunner.execute(
+			() ->
+			myAppWindow.showError("error message", new Student("1", "test1"))
+		);
+		window.label("errorMessageLabel").requireText("error message: " + new Student("1", "test1"));
+	}
+
+	@Test @GUITest
+	public void testStudentAddedShouldResetErrorMessage() {
+		// arrange
+		GuiActionRunner.execute(
+			() -> window.label("errorMessageLabel").target().setText("an error")
+		);
+		// act
+		GuiActionRunner.execute(
+			() ->
+			myAppWindow.studentAdded(new Student("1", "test1"))
+		);
+		// assert
+		window.label("errorMessageLabel").requireText(" ");
+	}
+
+	@Test @GUITest
+	public void testStudentRemovedShouldResetErrorMessage() {
+		// arrange
+		GuiActionRunner.execute(
+			() -> window.label("errorMessageLabel").target().setText("an error")
+		);
+		// act
+		GuiActionRunner.execute(
+			() ->
+			myAppWindow.studentRemoved(new Student("1", "test1"))
+		);
+		// assert
+		window.label("errorMessageLabel").requireText(" ");
 	}
 }
