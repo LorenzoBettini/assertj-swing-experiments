@@ -119,4 +119,25 @@ public class MyAppWindowTest extends AssertJSwingJUnitTestCase {
 		window.button(JButtonMatcher.withText("Delete Selected")).click();
 		verify(studentRepository).delete("2");
 	}
+
+	@Test
+	public void testsDeletedStudentShouldRemoveTheStudentFromTheList() {
+		// arrange
+		GuiActionRunner.execute(
+			() ->
+			myAppWindow.showAllStudents(
+				Arrays.asList(
+					new Student("1", "test1"),
+					new Student("2", "test2")))
+		);
+		// act
+		GuiActionRunner.execute(
+			() ->
+			myAppWindow.studentRemoved(new Student("1", "test1"))
+		);
+		// assert
+		String[] listContents = window.list().contents();
+		assertThat(listContents)
+			.containsExactly("2 - test2");
+	}
 }

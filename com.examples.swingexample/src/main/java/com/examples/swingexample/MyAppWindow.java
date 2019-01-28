@@ -34,6 +34,11 @@ public class MyAppWindow extends JFrame {
 		public String toString() {
 			return student.getId() + " - " + student.getName();
 		}
+
+		@Override
+		public boolean equals(Object obj) {
+			return student.equals(((StudentViewModel)obj).student);
+		}
 	}
 
 	static final class StudentListModel extends DefaultListModel<StudentViewModel> {
@@ -41,6 +46,10 @@ public class MyAppWindow extends JFrame {
 
 		public void addStudent(Student student) {
 			addElement(new StudentViewModel(student));
+		}
+
+		public void removeStudent(Student student) {
+			removeElement(new StudentViewModel(student));
 		}
 	}
 
@@ -217,5 +226,9 @@ public class MyAppWindow extends JFrame {
 	public void showAllStudents(List<Student> asList) {
 		asList.stream()
 			.forEach(listModel::addStudent);
+	}
+
+	public void studentRemoved(Student student) {
+		listModel.removeStudent(student);
 	}
 }
