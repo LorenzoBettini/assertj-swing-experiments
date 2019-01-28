@@ -48,6 +48,7 @@ public class MyAppWindowTest extends AssertJSwingJUnitTestCase {
 		window.button(JButtonMatcher.withText("Add")).requireDisabled();
 		window.list("studentList");
 		window.button(JButtonMatcher.withText("Delete Selected")).requireDisabled();
+		window.label("errorMessageLabel").requireText(" ");
 	}
 
 	@Test

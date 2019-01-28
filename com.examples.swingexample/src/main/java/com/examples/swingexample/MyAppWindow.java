@@ -20,6 +20,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
+import java.awt.Color;
 
 public class MyAppWindow extends JFrame {
 
@@ -64,6 +65,7 @@ public class MyAppWindow extends JFrame {
 
 	private StudentListModel listModel = new StudentListModel();
 	private JButton btnDeleteSelected;
+	private JLabel lblErrorMessage;
 
 	/**
 	 * Launch the application.
@@ -114,9 +116,9 @@ public class MyAppWindow extends JFrame {
 		this.studentRepository = repository;
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 267};
-		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 0};
+		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0};
 		gridBagLayout.columnWeights = new double[]{0.0, 1.0};
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE};
 		getContentPane().setLayout(gridBagLayout);
 		
 		JLabel lblId = new JLabel("id");
@@ -205,10 +207,22 @@ public class MyAppWindow extends JFrame {
 		});
 		btnDeleteSelected.setEnabled(false);
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
+		gbc_btnNewButton.insets = new Insets(0, 0, 5, 0);
 		gbc_btnNewButton.gridwidth = 2;
 		gbc_btnNewButton.gridx = 0;
 		gbc_btnNewButton.gridy = 4;
 		getContentPane().add(btnDeleteSelected, gbc_btnNewButton);
+		
+		lblErrorMessage = new JLabel();
+		lblErrorMessage.setText(" ");
+		lblErrorMessage.setForeground(Color.RED);
+		lblErrorMessage.setName("errorMessageLabel");
+		GridBagConstraints gbc_lblErrorMessage = new GridBagConstraints();
+		gbc_lblErrorMessage.gridwidth = 2;
+		gbc_lblErrorMessage.insets = new Insets(0, 0, 0, 5);
+		gbc_lblErrorMessage.gridx = 0;
+		gbc_lblErrorMessage.gridy = 5;
+		getContentPane().add(lblErrorMessage, gbc_lblErrorMessage);
 		
 		initialize();
 	}
