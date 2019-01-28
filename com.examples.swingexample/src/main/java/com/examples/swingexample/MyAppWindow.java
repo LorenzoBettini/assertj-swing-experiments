@@ -231,4 +231,8 @@ public class MyAppWindow extends JFrame {
 	public void studentRemoved(Student student) {
 		listModel.removeStudent(student);
 	}
+
+	public void studentAdded(Student student) {
+		listModel.addStudent(student);
+	}
 }

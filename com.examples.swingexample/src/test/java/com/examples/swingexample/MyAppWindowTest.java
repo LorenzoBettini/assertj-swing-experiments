@@ -121,7 +121,7 @@ public class MyAppWindowTest extends AssertJSwingJUnitTestCase {
 	}
 
 	@Test
-	public void testsDeletedStudentShouldRemoveTheStudentFromTheList() {
+	public void testDeletedStudentShouldRemoveTheStudentFromTheList() {
 		// arrange
 		GuiActionRunner.execute(
 			() ->
@@ -139,5 +139,16 @@ public class MyAppWindowTest extends AssertJSwingJUnitTestCase {
 		String[] listContents = window.list().contents();
 		assertThat(listContents)
 			.containsExactly("2 - test2");
+	}
+
+	@Test
+	public void testStudentAddedShouldAddTheStudentToTheList() {
+		GuiActionRunner.execute(
+			() ->
+			myAppWindow.studentAdded(new Student("1", "test1"))
+		);
+		String[] listContents = window.list().contents();
+		assertThat(listContents)
+			.containsExactly("1 - test1");
 	}
 }
