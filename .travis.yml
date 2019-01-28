@@ -1,0 +1,17 @@
+language: java
+
+matrix:
+   include:
+      - jdk: openjdk8
+      - os: osx
+        osx_image: xcode10.1
+
+# skip installation step
+install: true
+
+cache:
+   directories:
+      - $HOME/.m2
+
+script:
+   - mvn -f com.examples.swingexample/pom.xml clean verify
