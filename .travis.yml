@@ -3,6 +3,9 @@ language: java
 matrix:
    include:
       - jdk: openjdk8
+        dist: xenial
+        services:
+          - xvfb
       - os: osx
         osx_image: xcode10.1
 
