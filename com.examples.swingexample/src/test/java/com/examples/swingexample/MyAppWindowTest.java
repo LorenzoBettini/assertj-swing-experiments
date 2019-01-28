@@ -44,6 +44,7 @@ public class MyAppWindowTest extends AssertJSwingJUnitTestCase {
 		window.textBox("nameTextBox").requireEnabled();
 		window.button(JButtonMatcher.withText("Add")).requireDisabled();
 		window.list("studentList");
+		window.button(JButtonMatcher.withText("Delete Selected")).requireDisabled();
 	}
 
 	@Test
@@ -71,7 +72,7 @@ public class MyAppWindowTest extends AssertJSwingJUnitTestCase {
 	}
 
 	@Test
-	public void shouldCallStudentRepository() {
+	public void testAddButtonShouldAddTheEnteredStudentInformationThroughTheRepository() {
 		window.textBox("idTextBox").enterText("1");
 		window.textBox("nameTextBox").enterText("test");
 		window.button(JButtonMatcher.withText("Add")).click();
