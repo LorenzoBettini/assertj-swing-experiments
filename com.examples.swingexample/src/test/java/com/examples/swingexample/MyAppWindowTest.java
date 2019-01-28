@@ -1,11 +1,8 @@
 package com.examples.swingexample;
 
-import org.assertj.swing.edt.FailOnThreadViolationRepaintManager;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -17,7 +14,7 @@ import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
 
-public class MyAppWindowTest {
+public class MyAppWindowTest extends AssertJSwingJUnitTestCase {
 
 	private FrameFixture window;
 
@@ -26,25 +23,15 @@ public class MyAppWindowTest {
 
 	private MyAppWindow myAppWindow;
 
-	@BeforeClass
-	public static void setUpOnce() {
-		FailOnThreadViolationRepaintManager.install();
-	}
-
-	@Before
-	public void setUp() {
+	@Override
+	public void onSetUp() {
 		MockitoAnnotations.initMocks(this);
 		MyAppWindow frame = GuiActionRunner.execute(() -> {
 			myAppWindow = new MyAppWindow(studentRepository);
 			return myAppWindow;
 		});
-		window = new FrameFixture(frame);
+		window = new FrameFixture(robot(), frame);
 		window.show(); // shows the frame to test
-	}
-
-	@After
-	public void tearDown() {
-		window.cleanUp();
 	}
 
 	@Test
