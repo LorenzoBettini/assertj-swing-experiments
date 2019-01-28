@@ -18,7 +18,7 @@ import javax.swing.JTextField;
 
 public class MyAppWindow extends JFrame {
 
-	private static final class StudentViewModel {
+	static final class StudentViewModel {
 		private Student student;
 
 		public StudentViewModel(Student student) {
@@ -31,6 +31,14 @@ public class MyAppWindow extends JFrame {
 		}
 	}
 
+	static final class StudentListModel extends DefaultListModel<StudentViewModel> {
+		private static final long serialVersionUID = 1L;
+
+		public void addStudent(Student student) {
+			addElement(new StudentViewModel(student));
+		}
+	}
+
 	private static final long serialVersionUID = 1L;
 
 	private StudentRepository studentRepository;
@@ -40,7 +48,7 @@ public class MyAppWindow extends JFrame {
 	private JList<StudentViewModel> list;
 	private JScrollPane scrollPane;
 
-	private DefaultListModel<StudentViewModel> listModel = new DefaultListModel<>();
+	private StudentListModel listModel = new StudentListModel();
 
 	/**
 	 * Launch the application.
@@ -128,7 +136,7 @@ public class MyAppWindow extends JFrame {
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				studentRepository.save(new Student());
-				listModel.addElement(new StudentViewModel(new Student("1", "test")));
+				listModel.addStudent(new Student("1", "test"));
 			}
 		});
 		GridBagConstraints gbc_btnAdd = new GridBagConstraints();
@@ -162,7 +170,6 @@ public class MyAppWindow extends JFrame {
 
 	public void showAllStudents(List<Student> asList) {
 		asList.stream()
-			.map(StudentViewModel::new)
-			.forEach(listModel::addElement);
+			.forEach(listModel::addStudent);
 	}
 }
