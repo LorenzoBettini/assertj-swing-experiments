@@ -189,6 +189,11 @@ public class MyAppWindow extends JFrame {
 		getContentPane().add(scrollPane, gbc_scrollPane);
 		
 		btnDeleteSelected = new JButton("Delete Selected");
+		btnDeleteSelected.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				studentRepository.delete(list.getSelectedValue().student.getId());
+			}
+		});
 		btnDeleteSelected.setEnabled(false);
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.gridwidth = 2;

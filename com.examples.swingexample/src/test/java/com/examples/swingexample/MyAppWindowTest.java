@@ -11,6 +11,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import com.examples.swingexample.MyAppWindow.StudentListModel;
+
 import static org.assertj.core.api.Assertions.*;
 
 import static org.mockito.Mockito.*;
@@ -73,7 +75,7 @@ public class MyAppWindowTest extends AssertJSwingJUnitTestCase {
 	}
 
 	@Test
-	public void testAddButtonShouldAddTheEnteredStudentInformationThroughTheRepository() {
+	public void testAddButtonShouldAddTheEnteredTheStudentInformationThroughTheRepository() {
 		window.textBox("idTextBox").enterText("1");
 		window.textBox("nameTextBox").enterText("test");
 		window.button(JButtonMatcher.withText("Add")).click();
@@ -81,7 +83,7 @@ public class MyAppWindowTest extends AssertJSwingJUnitTestCase {
 	}
 
 	@Test
-	public void shouldAddStudentToList() {
+	public void testsShowAllStudentsShouldAddStudentsToTheList() {
 		GuiActionRunner.execute(
 			() ->
 			myAppWindow.showAllStudents(
@@ -97,11 +99,24 @@ public class MyAppWindowTest extends AssertJSwingJUnitTestCase {
 	@Test
 	public void testDeleteButtonShouldBeEnabledOnlyWhenAStudentIsSelected() {
 		JButtonFixture deleteButton = window.button(JButtonMatcher.withText("Delete Selected"));
-		GuiActionRunner.execute(()->myAppWindow.getListModel().addStudent(new Student("1", "test")));
+		GuiActionRunner.execute(() -> myAppWindow.getListModel().addStudent(new Student("1", "test")));
 		deleteButton.requireDisabled();
 		window.list("studentList").selectItem(0);
 		deleteButton.requireEnabled();
 		window.list("studentList").clearSelection();
 		deleteButton.requireDisabled();
+	}
+
+	@Test
+	public void testsDeleteButtonShouldDeleteTheSelectedStudentThroughTheRepository() {
+		GuiActionRunner.execute(
+				() -> {
+					StudentListModel listModel = myAppWindow.getListModel();
+					listModel.addStudent(new Student("1", "test1"));
+					listModel.addStudent(new Student("2", "test2"));
+				});
+		window.list("studentList").selectItem(1);
+		window.button(JButtonMatcher.withText("Delete Selected")).click();
+		verify(studentRepository).delete("2");
 	}
 }
