@@ -4,6 +4,7 @@ import org.assertj.swing.core.matcher.JButtonMatcher;
 import org.assertj.swing.core.matcher.JLabelMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
+import org.assertj.swing.fixture.JButtonFixture;
 import org.assertj.swing.fixture.JTextComponentFixture;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
@@ -91,5 +92,16 @@ public class MyAppWindowTest extends AssertJSwingJUnitTestCase {
 		String[] listContents = window.list().contents();
 		assertThat(listContents)
 			.containsExactly("1 - test1", "2 - test2");
+	}
+
+	@Test
+	public void testDeleteButtonShouldBeEnabledOnlyWhenAStudentIsSelected() {
+		JButtonFixture deleteButton = window.button(JButtonMatcher.withText("Delete Selected"));
+		GuiActionRunner.execute(()->myAppWindow.getListModel().addStudent(new Student("1", "test")));
+		deleteButton.requireDisabled();
+		window.list("studentList").selectItem(0);
+		deleteButton.requireEnabled();
+		window.list("studentList").clearSelection();
+		deleteButton.requireDisabled();
 	}
 }

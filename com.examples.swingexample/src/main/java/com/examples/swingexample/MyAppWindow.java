@@ -17,6 +17,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
 
 public class MyAppWindow extends JFrame {
 
@@ -51,7 +54,7 @@ public class MyAppWindow extends JFrame {
 	private JScrollPane scrollPane;
 
 	private StudentListModel listModel = new StudentListModel();
-	private JButton btnNewButton;
+	private JButton btnDeleteSelected;
 
 	/**
 	 * Launch the application.
@@ -88,6 +91,11 @@ public class MyAppWindow extends JFrame {
 				}
 			}
 		});
+	}
+
+	// package private for tests
+	StudentListModel getListModel() {
+		return listModel;
 	}
 
 	/**
@@ -164,6 +172,12 @@ public class MyAppWindow extends JFrame {
 		getContentPane().add(btnAdd, gbc_btnAdd);
 		
 		list = new JList<>(listModel);
+		list.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent e) {
+				btnDeleteSelected.setEnabled(list.getSelectedIndex() != -1);
+			}
+		});
+		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.setName("studentList");
 		scrollPane = new JScrollPane(list);
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
@@ -174,13 +188,13 @@ public class MyAppWindow extends JFrame {
 		gbc_scrollPane.gridy = 3;
 		getContentPane().add(scrollPane, gbc_scrollPane);
 		
-		btnNewButton = new JButton("Delete Selected");
-		btnNewButton.setEnabled(false);
+		btnDeleteSelected = new JButton("Delete Selected");
+		btnDeleteSelected.setEnabled(false);
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.gridwidth = 2;
 		gbc_btnNewButton.gridx = 0;
 		gbc_btnNewButton.gridy = 4;
-		getContentPane().add(btnNewButton, gbc_btnNewButton);
+		getContentPane().add(btnDeleteSelected, gbc_btnNewButton);
 		
 		initialize();
 	}
