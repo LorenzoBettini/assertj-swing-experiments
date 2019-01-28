@@ -15,6 +15,8 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class MyAppWindow extends JFrame {
 
@@ -108,6 +110,16 @@ public class MyAppWindow extends JFrame {
 		getContentPane().add(lblId, gbc_lblId);
 		
 		idTextField = new JTextField();
+		KeyAdapter btnAddEnabler = new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				btnAdd.setEnabled(
+					!idTextField.getText().trim().isEmpty()
+					&& !nameTextField.getText().trim().isEmpty());
+			}
+		};
+		idTextField.addKeyListener(btnAddEnabler);
+		idTextField.setName("idTextBox");
 		GridBagConstraints gbc_textField = new GridBagConstraints();
 		gbc_textField.insets = new Insets(0, 0, 5, 0);
 		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
@@ -124,6 +136,8 @@ public class MyAppWindow extends JFrame {
 		getContentPane().add(lblName, gbc_lblName);
 		
 		nameTextField = new JTextField();
+		nameTextField.setName("nameTextBox");
+		nameTextField.addKeyListener(btnAddEnabler);
 		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
 		gbc_textField_1.insets = new Insets(0, 0, 5, 0);
 		gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
@@ -133,9 +147,11 @@ public class MyAppWindow extends JFrame {
 		nameTextField.setColumns(10);
 		
 		btnAdd = new JButton("Add");
+		btnAdd.setEnabled(false);
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				studentRepository.save(new Student());
+				studentRepository.save(new Student(idTextField.getText(), nameTextField.getText()));
+				// TODO remove the following, only used now for manual tests
 				listModel.addStudent(new Student("1", "test"));
 			}
 		});
@@ -147,6 +163,7 @@ public class MyAppWindow extends JFrame {
 		getContentPane().add(btnAdd, gbc_btnAdd);
 		
 		list = new JList<>(listModel);
+		list.setName("studentList");
 		scrollPane = new JScrollPane(list);
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
 		gbc_scrollPane.fill = GridBagConstraints.BOTH;

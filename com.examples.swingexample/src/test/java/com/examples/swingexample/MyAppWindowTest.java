@@ -1,13 +1,15 @@
 package com.examples.swingexample;
 
+import org.assertj.swing.core.matcher.JButtonMatcher;
+import org.assertj.swing.core.matcher.JLabelMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
+import org.assertj.swing.fixture.JTextComponentFixture;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.assertj.swing.core.matcher.JButtonMatcher.*;
 import static org.assertj.core.api.Assertions.*;
 
 import static org.mockito.Mockito.*;
@@ -35,9 +37,45 @@ public class MyAppWindowTest extends AssertJSwingJUnitTestCase {
 	}
 
 	@Test
+	public void testControlsInitialStates() {
+		window.label(JLabelMatcher.withText("id"));
+		window.textBox("idTextBox").requireEnabled();
+		window.label(JLabelMatcher.withText("name"));
+		window.textBox("nameTextBox").requireEnabled();
+		window.button(JButtonMatcher.withText("Add")).requireDisabled();
+		window.list("studentList");
+	}
+
+	@Test
+	public void testWhenEitherIdOrNameAreEmptyThenAddButtonShouldBeDisabled() {
+		JTextComponentFixture idTextBox = window.textBox("idTextBox");
+		JTextComponentFixture nameTextBox = window.textBox("nameTextBox");
+
+		idTextBox.enterText("1");
+		nameTextBox.enterText(" ");
+		window.button(JButtonMatcher.withText("Add")).requireDisabled();
+
+		idTextBox.setText("");
+		nameTextBox.setText("");
+
+		idTextBox.enterText(" ");
+		nameTextBox.enterText("test");
+		window.button(JButtonMatcher.withText("Add")).requireDisabled();
+	}
+
+	@Test
+	public void testWhenIdAndNameAreNonEmptyThenAddButtonShouldBeEnabled() {
+		window.textBox("idTextBox").enterText("1");
+		window.textBox("nameTextBox").enterText("test");
+		window.button(JButtonMatcher.withText("Add")).requireEnabled();
+	}
+
+	@Test
 	public void shouldCallStudentRepository() {
-		window.button(withText("Add")).click();
-		verify(studentRepository).save(new Student());
+		window.textBox("idTextBox").enterText("1");
+		window.textBox("nameTextBox").enterText("test");
+		window.button(JButtonMatcher.withText("Add")).click();
+		verify(studentRepository).save(new Student("1", "test"));
 	}
 
 	@Test
